@@ -1,0 +1,36 @@
+#toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #111;
+    color: #eee;
+    padding: 10px;
+    font-family: sans-serif;
+    user-select: none;
+}
+
+#toolbar button {
+    background: #2a2a2a;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#toolbar button:hover {
+    background: #00744e;
+}
+
+#pageNum,
+#pageCount {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    background: #1f1f1f;
+}
