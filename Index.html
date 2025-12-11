@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://embed.reddit.com;
+      frame-src 'self' https: blob: data:
+        https://firebasestorage.googleapis.com
+        https://docs.google.com
+        https://drive.google.com
+        https://view.officeapps.live.com;
+      connect-src 'self' https://api.microlink.io https://*.googleapis.com https://*.firebaseio.com https://firebasestorage.googleapis.com;
+      media-src 'self' blob: file: https://www.youtube.com https://www.youtube-nocookie.com https://*.googlevideo.com;">
+    <title>Indian Wildlife Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-badge">
+            Species Count: <span id="total-count">0</span>
+        </div>
+        <div class="hero-content">
+            <p class="hero-subtitle">Interactive Guide</p>
+            <h1 class="hero-title">Indian Wildlife Explorer</h1>
+        </div>
+    </header>
+
+    <!-- Home Page Content (shown in Family view) -->
+    <section id="home-content" class="home-page">
+        <div class="home-container">
+            <!-- Selector Bar -->
+            <div class="selector-bar">
+                <div class="selector-wrapper">
+                    <h3 id="selector-label" class="hidden">Family</h3>
+                    <div id="home-species-selector" class="selector-scroll"></div>
+                </div>
+            </div>
+
+            <!-- Home Feed Content -->
+            <div id="home-feed">
+                <!-- News Section -->
+                <div class="section-header">
+                    <h2 class="section-title" style="border:none; margin-bottom: 0.5rem; padding-left: 0.5rem;">📰
+                        Latest
+                        Wildlife News</h2>
+                    <button id="upload-news-btn" class="upload-btn">Upload News</button>
+                </div>
+                <div id="news-feed" class="home-section news-grid">
+                    <article class="news-card">
+                        <h3>New Wildlife Sanctuary Announced</h3>
+                        <p>Government declares new protected area in Western Ghats to preserve endemic species.</p>
+                    </article>
+                    <article class="news-card">
+                        <h3>Conservation Success Story</h3>
+                        <p>Asiatic Lion population shows steady increase in Gir Forest National Park.</p>
+                    </article>
+                </div>
+
+                <div class="home-section">
+                    <div class="section-header">
+                        <h2 class="section-title">🎥 Featured Wildlife Documentary</h2>
+                        <button id="upload-video-btn" class="upload-btn">Upload Documentary</button>
+                    </div>
+                    <div id="video-feed" class="video-container"></div>
+                </div>
+
+                <!-- Reddit Section -->
+                <h2 class="section-title" style="border:none; margin-bottom: 0.5rem; padding-left: 0.5rem;">💬
+                    Indian
+                    Wildlife Community</h2>
+                <div class="community-grid">
+                    <div class="subreddit-card">
+                        <blockquote class="reddit-embed-bq" style="height:400px" data-embed-height="400">
+                            <a href="https://www.reddit.com/r/IndianwildlifeHub/">r/IndianwildlifeHub</a>
+                        </blockquote>
+                    </div>
+                    <div class="subreddit-card">
+                        <blockquote class="reddit-embed-bq" style="height:400px" data-embed-height="400">
+                            <a href="https://www.reddit.com/r/LionsOfIndia/">r/LionsOfIndia</a>
+                        </blockquote>
+                    </div>
+                    <div class="subreddit-card">
+                        <blockquote class="reddit-embed-bq" style="height:400px" data-embed-height="400">
+                            <a href="https://www.reddit.com/r/TigersofIndia/">r/TigersofIndia</a>
+                        </blockquote>
+                    </div>
+                    <div class="subreddit-card"
+                        style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #059669 0%, #064e3b 100%); border-radius: 12px; min-height: 400px;">
+                        <a href="https://www.nyburs.com/circles/01K6CDXN4CD6YTX8GCERTMNPQM" target="_blank"
+                            style="color: white; text-decoration: none; text-align: center; padding: 2rem;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🌿</div>
+                            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Indian Wildlife Circle</h3>
+                            <p style="opacity: 0.9; margin-bottom: 1rem;">Join our Nyburs community</p>
+                            <span
+                                style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600;">Visit
+                                Circle ↗</span>
+                        </a>
+                    </div>
+                    <script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
+                </div>
+
+                <!-- Project Article Section -->
+                <div class="section-header" style="margin-top: 2rem;">
+                    <h2 class="section-title" style="border:none; margin-bottom: 0.5rem; padding-left: 0.5rem;">📄
+                        Wildlife Project Article</h2>
+                    <button id="upload-article-btn" class="upload-btn">Upload Article</button>
+                </div>
+                <div id="article-feed" class="home-section news-grid">
+                    <!-- Articles will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Species Details Content (shown in Species view) -->
+    <section id="species-content" class="hidden">
+        <!-- Selector Bar for Details View -->
+        <div class="selector-bar">
+            <div class="selector-wrapper">
+                <h3 id="details-selector-label" class="hidden">Species</h3>
+                <div id="details-species-selector" class="selector-scroll"></div>
+            </div>
+        </div>
+
+        <main class="main-layout">
+            <section class="panel-left">
+                <div class="profile-card">
+                    <div class="profile-image-container">
+                        <img id="detail-image" src="" alt="Select Species">
+                        <div class="image-gradient"></div>
+                        <span id="detail-status" class="status-badge">Status</span>
+                        <div class="profile-text-overlay">
+                            <h2 id="detail-name">Select Species</h2>
+                            <p id="detail-scientific">Scientific Name</p>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <label>Population</label>
+                            <p id="detail-pop">-</p>
+                        </div>
+                        <div class="stat-box">
+                            <label>Diet</label>
+                            <p id="detail-diet-type">-</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel-right">
+                <div class="details-card">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="overview">Overview</button>
+                        <button class="tab-btn" data-tab="habitat">Habitat</button>
+                        <button class="tab-btn" data-tab="social">Social</button>
+                    </div>
+                    <div class="content-area">
+                        <p id="content-text">Select a species from the list above to view its details.</p>
+                    </div>
+                    <div class="details-footer">
+                        Indian Wildlife Explorer v1.0
+                    </div>
+                </div>
+                <div class="details-card" style="margin-top: 1.5rem;">
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-400 uppercase mb-2">Species Character Profile</h4>
+                        <div class="chart-container h-48 sm:h-56">
+                            <canvas id="traitChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </section>
+    <div id="upload-panel" class="upload-panel hidden">
+        <div class="panel-content">
+            <h2 id="upload-panel-title">Upload News</h2>
+
+            <label>Title</label>
+            <input type="text" id="upload-title">
+
+            <div id="default-upload-fields">
+                <label>Description</label>
+                <textarea id="upload-description"></textarea>
+
+                <label>URL (optional — YouTube/News)</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="upload-link" style="flex: 1;">
+                    <button id="fetch-metadata-btn" class="upload-btn"
+                        style="padding: 0.6rem; white-space: nowrap;">Fetch</button>
+                </div>
+
+                <label>Thumbnail (optional)</label>
+                <div class="file-upload-wrapper">
+                    <label for="upload-thumb" class="custom-file-upload">
+                        <div class="upload-icon">🖼️</div>
+                        <span>Click to Upload Cover Image</span>
+                    </label>
+                    <input type="file" id="upload-thumb" accept="image/*" style="display:none">
+                    <img id="thumbnail-preview" class="hidden"
+                        style="width: 100%; margin-top: 10px; border-radius: 8px; object-fit: cover; max-height: 200px;">
+                </div>
+            </div>
+
+            <div id="video-upload-field" class="hidden">
+                <label style="margin-top: 1rem;">Or Upload Video File (mp4/mkv)</label>
+                <input type="file" id="upload-video-file" accept="video/*">
+            </div>
+
+            <div id="article-upload-fields" class="hidden">
+                <label style="margin-top: 1rem;">Checklist Name</label>
+                <div style="position: relative;">
+                    <input type="text" id="upload-checklist" placeholder="e.g. Indian Wildlife 2025" autocomplete="off">
+                    <div id="checklist-suggestions" class="suggestions-box hidden"></div>
+                </div>
+
+                <label style="margin-top: 1.5rem;">Cover Photo</label>
+                <div class="file-upload-wrapper">
+                    <label for="upload-article-cover" class="custom-file-upload">
+                        <div class="upload-icon">???</div>
+                        <span>Click to Upload Cover Photo</span>
+                    </label>
+                    <input type="file" id="upload-article-cover" accept="image/*" style="display:none">
+                    <img id="article-cover-preview" class="hidden"
+                        style="width: 100%; margin-top: 10px; border-radius: 8px; object-fit: cover; max-height: 200px;">
+                </div>
+
+                <label style="margin-top: 1rem;">Upload Article (PDF/DOC)</label>
+                <input type="file" id="upload-article-file" accept=".pdf,.doc,.docx">
+            </div>
+
+            <div class="panel-actions">
+                <button id="upload-cancel-btn">Cancel</button>
+                <button id="upload-save-btn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="video-modal hidden">
+        <div class="video-modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal-btn" onclick="closeVideoModal()">×</span>
+            <div class="modal-video-container">
+                <iframe id="modal-video-view"
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+                <video id="modal-video-player" controls
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; background: black;"></video>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="video-modal hidden">
+        <div class="video-modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal-btn" onclick="closeVideoModal()">×</span>
+            <div class="modal-video-container">
+                <iframe id="modal-video-view"
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+                <video id="modal-video-player" controls
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; background: black;"></video>
+
+                <div id="video-error-overlay" class="hidden"
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; z-index: 10;">
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                        <h3 style="color: #fff; margin-bottom: 1rem; font-size: 1.5rem;">
+                            Video Cannot Be Embedded</h3>
+                        <p style="color: #d4d4d8; margin-bottom: 2rem; max-width: 400px;">
+                            This video has embedding restrictions and can only be watched on YouTube.</p>
+                        <button id="open-youtube-btn"
+                            style="background: #ff0000; color: white; border: none; padding: 0.875rem 2rem; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: 600; box-shadow: 0 4px 12px rgba(255,0,0,0.3); transition: all 0.2s;">
+                            Watch on YouTube ↗
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- News Slide-up Page -->
+    <div id="news-slide-page" class="news-slide-page">
+        <div class="news-slide-header">
+            <h2 id="news-slide-title">News Article</h2>
+            <button class="close-slide-btn" onclick="closeNewsPage()">×</button>
+        </div>
+        <div class="news-slide-content">
+            <iframe id="news-iframe" src="" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <!-- Article Viewer Modal -->
+    <div id="article-viewer-modal" class="slide-up-modal">
+        <div class="modal-header">
+            <h2 id="article-viewer-title">Article Viewer</h2>
+            <button class="close-btn" onclick="closeArticleViewer()">×</button>
+        </div>
+        <div class="modal-content"
+            style="padding: 0; height: calc(100% - 60px); display: flex; flex-direction: column;">
+            <iframe id="article-frame" style="width: 100%; height: 100%; border: none; overflow: auto;" scrolling="auto"
+                class="hidden"></iframe>
+            <div id="article-fallback" class="hidden"
+                style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 2rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
+                <h3 style="margin-bottom: 0.5rem;">Preview Not Available</h3>
+                <p style="color: #6b7280; margin-bottom: 1.5rem;">This file type cannot be viewed directly in the app.
+                </p>
+                <button id="open-external-btn" class="upload-btn" style="width: auto; padding: 0.75rem 1.5rem;">Open in
+                    Default App ↗</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="renderer.js"></script>
+</body>
+
+</html>

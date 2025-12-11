@@ -1,0 +1,40 @@
+{
+    "name": "indian-wildlife-explorer",
+    "version": "1.0.0",
+    "description": "Interactive guide to Indian Wildlife",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "build": "electron-builder --win --x64",
+        "build-all": "electron-builder --win --x64 --ia32",
+        "dist": "electron-builder",
+        "package": "electron-packager .indian-wildlife--platform=win32 --arch=x64 --out=dist --overwrite"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "electron": "^28.3.3",
+        "electron-builder": "^26.0.12"
+    },
+    "dependencies": {
+        "cheerio-without-node-native": "^0.20.2",
+        "express": "^5.2.0",
+        "firebase": "^12.6.0"
+    },
+    "build": {
+        "appId": "com.indianwildlife.explorer",
+        "productName": "Indian Wildlife Explorer",
+        "win": {
+            "target": [
+                "nsis",
+                "portable"
+            ],
+            "icon": "icon.ico"
+        },
+        "nsis": {
+            "oneClick": false,
+            "allowToChangeInstallationDirectory": true
+        }
+    }
+}

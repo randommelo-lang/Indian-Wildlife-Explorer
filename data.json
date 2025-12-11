@@ -1,0 +1,179 @@
+[
+    {
+        "Order": "Mammalia",
+        "id": "dhole",
+        "name": "The Dhole",
+        "shortName": "Dhole",
+        "scientific": "Cuon alpinus",
+        "image": "Dhole.jpeg",
+        "objectPosition": "center",
+        "status": "Endangered",
+        "population": "1,000 - 2,000",
+        "dietType": "Carnivore",
+        "overview": "Also known as the \"Whistling Hunter,\" the Dhole is one of India's most efficient and social predators. Unlike wolves or dogs, they have a reddish-brown coat and a distinct bushy tail with a black tip.",
+        "habitat": "Dense deciduous forests, jungles, and alpine steppes. Major populations in the Western Ghats, Central India, and Northeast India.",
+        "social": "Extremely social; they live in clans (up to 40 members) but hunt in packs of 5–12. They communicate with unique whistles, clucks, and screams.",
+        "traits": [
+            95,
+            80,
+            60,
+            40
+        ],
+        "family": "Canidae"
+    },
+    {
+        "Order": "Mammalia",
+        "id": "jackal",
+        "name": "Golden Jackal",
+        "shortName": "Jackal",
+        "scientific": "Canis aureus",
+        "image": "Golden Jackal.jpg",
+        "objectPosition": "center",
+        "status": "Least Concern",
+        "population": "80,000+",
+        "dietType": "Omnivore",
+        "overview": "The most adaptable canid in India, found in nearly every environment except the high Himalayas and dense desert. They are the \"cleanup crew\" of the forest.",
+        "habitat": "Mangrove forests (Sundarbans), scrublands, agricultural fields, and village outskirts.",
+        "social": "Monogamous and mate for life. Live in pairs or small family groups. Known for eerie howling at dusk.",
+        "traits": [
+            60,
+            20,
+            50,
+            95
+        ],
+        "family": "Canidae"
+    },
+    {
+        "Order": "Mammalia",
+        "id": "himalayan-wolf",
+        "name": "Himalayan Wolf",
+        "shortName": "Himalayan",
+        "scientific": "Canis lupus chanco",
+        "image": "Himalayan wolf.jpeg",
+        "objectPosition": "center",
+        "status": "Vulnerable",
+        "population": "227 - 378",
+        "dietType": "Carnivore",
+        "overview": "An ancient and mysterious lineage, genetically distinct from the common Grey Wolf and adapted to high-altitude living.",
+        "habitat": "High-altitude Trans-Himalayas (above 4,000m), specifically Ladakh, Spiti Valley, and Sikkim.",
+        "social": "Live in small packs (nuclear families). Adapted to low oxygen with a thick woolly coat.",
+        "traits": [
+            70,
+            95,
+            85,
+            30
+        ],
+        "family": "Canidae"
+    },
+    {
+        "Order": "Mammalia",
+        "id": "indian-fox",
+        "name": "Indian Fox",
+        "shortName": "Ind. Fox",
+        "scientific": "Vulpes bengalensis",
+        "image": "Indian Fox.jpg",
+        "objectPosition": "center",
+        "status": "Near Threatened",
+        "population": "Unknown",
+        "dietType": "Omnivore",
+        "overview": "Endemic to the Indian subcontinent, this small fox is recognized by the black tip on its tail and its chattering call.",
+        "habitat": "Semi-arid, flat country, open scrublands, grasslands, and agricultural fields. Avoids dense forests.",
+        "social": "Live in permanent bonded pairs but hunt alone. Famous for complex dens with multiple emergency exits.",
+        "traits": [
+            40,
+            50,
+            30,
+            70
+        ],
+        "family": "Canidae"
+    },
+    {
+        "Order": "Mammalia",
+        "id": "red-fox",
+        "name": "Red Fox",
+        "shortName": "Red Fox",
+        "scientific": "Vulpes vulpes",
+        "image": "Red Fox.jpeg",
+        "objectPosition": "center",
+        "status": "Least Concern",
+        "population": "Common",
+        "dietType": "Omnivore",
+        "overview": "Represented in India by two subspecies: the Desert Fox in the northwest and the Hill Fox in the Himalayas.",
+        "habitat": "Hill Fox: High Himalayas up to snowline. Desert Fox: Sand dunes/salty flats of Kutch and Rajasthan.",
+        "social": "Solitary hunters, shy and elusive.",
+        "traits": [
+            20,
+            30,
+            35,
+            80
+        ],
+        "family": "Canidae"
+    },
+    {
+        "Order": "Mammalia",
+        "id": "indian-wolf",
+        "name": "Indian Wolf",
+        "shortName": "Ind. Wolf",
+        "scientific": "Canis lupus pallipes",
+        "image": "Indian Wolf.jpg",
+        "objectPosition": "center",
+        "status": "Endangered",
+        "population": "2,000 - 3,000",
+        "dietType": "Carnivore",
+        "overview": "Lean, lanky, and adapted to the heat of the Indian plains. Smaller than European wolves and rarely howls.",
+        "habitat": "Open grasslands, scrub forests, and semi-arid landscapes of Gujarat, Rajasthan, Maharashtra, and Karnataka.",
+        "social": "Small packs of 6–8. Extremely elusive and often nocturnal to avoid humans.",
+        "traits": [
+            75,
+            85,
+            80,
+            50
+        ],
+        "family": "Canidae"
+    },
+    {
+        "Order": "Mammalia",
+        "id": "Indian-Dog",
+        "name": "Indian Pariah Dog",
+        "shortName": "Indie",
+        "scientific": "Canis lupus familiaris",
+        "image": "Indian Pariah Dog.jpg",
+        "objectPosition": "top",
+        "status": "Abundant",
+        "population": "Millions",
+        "dietType": "Scavenger",
+        "overview": "An ancient landrace and naturally evolved breed existing in India for over 4,500 years. Not \"mixed breeds.\"",
+        "habitat": "Everywhere in India, from rural villages to cities. Highly adaptable.",
+        "social": "Highly territorial and social, living in packs with strict hierarchy. Intelligent and alert.",
+        "traits": [
+            90,
+            10,
+            60,
+            100
+        ],
+        "family": "Canidae"
+    },
+    {
+        "Order": "Mammalia",
+        "id": "Tibetan Sand Fox",
+        "name": "Tibetan Sand Fox",
+        "shortName": "Sand Fox",
+        "scientific": "Vulpes ferrilata Hodgson",
+        "image": "Sand Fox.jpg",
+        "objectPosition": "top",
+        "status": "Least Concern",
+        "population": "Unknown",
+        "dietType": "Carnivore",
+        "overview": "The Tibetan Sand Fox (scientific name: Vulpes ferrilata) is a medium-sized true fox adapted to cold, high-altitude environments. It has a distinctive broad, almost square-shaped face and a dense, insulating coat suited to harsh plateau climates. It occupies remote alpine/semi-desert steppes and avoids densely vegetated or human-dominated areas. It is one of the few “true foxes” in India (alongside a couple of others), primarily recorded from northern high-altitude regions.",
+        "habitat": "high Trans-Himalayan regions (especially in the areas of Ladakh and Sikkim.",
+        "social": "ends to live in mated pairs (monogamous). They may hunt together (male + female) and share prey. However, they are generally solitary when not hunting/raising young. They are not strongly territorial: multiple pairs may occupy nearby areas and even share hunting grounds.They use dens (often in rock crevices, under boulders or natural shelters, or old burrows) for resting, hiding from danger, and raising kits.",
+        "traits": [
+            60,
+            80,
+            90,
+            70
+        ],
+        "State&UT": "Ladakh, Sikkim",
+        "family": "Canidae"
+    }
+]
