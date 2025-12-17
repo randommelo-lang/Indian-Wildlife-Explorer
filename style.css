@@ -51,10 +51,79 @@ body {
 .hero-bg {
     position: absolute;
     inset: 0;
-    background-image: url('https://images.unsplash.com/photo-1560613866-5c575cb27734?q=80&w=2070&auto=format&fit=crop');
+    overflow: hidden;
+}
+
+/* Wildlife Slideshow Slides */
+.slide {
+    position: absolute;
+    inset: 0;
     background-size: cover;
     background-position: center;
-    opacity: 0.6;
+    opacity: 0;
+    animation: slideAnimation 30s infinite;
+}
+
+/* Tiger */
+.slide-1 {
+    background-image: url('https://images.unsplash.com/photo-1561731216-c3a4d99437d5?q=80&w=2000&auto=format&fit=crop');
+    animation-delay: 0s;
+}
+
+/* Leopard */
+.slide-2 {
+    background-image: url('https://images.unsplash.com/photo-1456926631375-92c8ce872def?q=80&w=2000&auto=format&fit=crop');
+    animation-delay: 5s;
+}
+
+/* Asiatic Lion */
+.slide-3 {
+    background-image: url('https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?q=80&w=2000&auto=format&fit=crop');
+    animation-delay: 10s;
+}
+
+/* Indian Rhino */
+.slide-4 {
+    background-image: url('https://images.unsplash.com/photo-1598894000329-81a8b9e0bf3b?q=80&w=2000&auto=format&fit=crop');
+    animation-delay: 15s;
+}
+
+/* Elephant */
+.slide-5 {
+    background-image: url('https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=2000&auto=format&fit=crop');
+    animation-delay: 20s;
+}
+
+/* Spotted Deer */
+.slide-6 {
+    background-image: url('https://images.unsplash.com/photo-1484406566174-9da000fda645?q=80&w=2000&auto=format&fit=crop');
+    animation-delay: 25s;
+}
+
+/* Slideshow animation - 30s total cycle, each image visible for 5s */
+@keyframes slideAnimation {
+    0% {
+        opacity: 0;
+        transform: scale(1);
+    }
+
+    3% {
+        opacity: 0.85;
+    }
+
+    16.67% {
+        opacity: 0.85;
+        transform: scale(1.05);
+    }
+
+    20% {
+        opacity: 0;
+        transform: scale(1.08);
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
 
 .hero-overlay {
@@ -1083,6 +1152,12 @@ body {
 }
 
 /* Status Colors for Selector Circles */
+.thumb-circle.status-critically-endangered {
+    border-color: #7f1d1d !important;
+    /* Deep red for critically endangered */
+    box-shadow: 0 0 0 3px rgba(127, 29, 29, 0.3);
+}
+
 .thumb-circle.status-endangered {
     border-color: #dc2626 !important;
     /* Red for endangered */
@@ -1108,6 +1183,12 @@ body {
 }
 
 /* Status Badge Colors */
+.status-badge.status-critically-endangered {
+    background: #7f1d1d;
+    /* Deep red for critically endangered */
+    color: white;
+}
+
 .status-badge.status-endangered {
     background: #dc2626;
     /* Red */

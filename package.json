@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "cheerio-without-node-native": "^0.20.2",
+        "dotenv": "^17.2.3",
         "express": "^5.2.0",
         "firebase": "^12.6.0"
     },

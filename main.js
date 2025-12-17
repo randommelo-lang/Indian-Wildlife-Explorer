@@ -4,6 +4,7 @@ const https = require("https");
 const cheerio = require("cheerio-without-node-native");
 const express = require("express");
 const fs = require("fs");
+require('dotenv').config();
 
 // ------------------------------------------------------
 // 🟢 1. FIREBASE SETUP
@@ -15,13 +16,13 @@ const { getAuth, signInAnonymously } = require("firebase/auth");
 
 // 🔴 PASTE YOUR FIREBASE KEYS HERE
 const firebaseConfig = {
-    apiKey: "AIzaSyBru1EdFHWMuXozUyaoVI5YH7yWcH_39cs",
-    authDomain: "indian-wildlife-417cf.firebaseapp.com",
-    projectId: "indian-wildlife-417cf",
-    storageBucket: "indian-wildlife-417cf.firebasestorage.app",
-    messagingSenderId: "278003071862",
-    appId: "1:278003071862:web:21d15970def595663d9857",
-    measurementId: "G-FFJJQCT48T"
+    apiKey: process.env.API_KEY,
+    authDomain: process.env.AUTH_DOMAIN,
+    projectId: process.env.PROJECT_ID,
+    storageBucket: process.env.STORAGE_BUCKET,
+    messagingSenderId: process.env.MESSAGING_SENDER_ID,
+    appId: process.env.APP_ID,
+    measurementId: process.env.MEASUREMENT_ID
 };
 
 // Initialize Cloud DB
@@ -168,6 +169,7 @@ function createWindow() {
     const win = new BrowserWindow({
         width: 1200,
         height: 800,
+        icon: path.join(__dirname, "icon.ico"),
         autoHideMenuBar: true,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),

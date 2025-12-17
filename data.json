@@ -1,6 +1,6 @@
 [
     {
-        "Order": "Mammalia",
+        "Order": "CARNIVORA",
         "id": "dhole",
         "name": "The Dhole",
         "shortName": "Dhole",
@@ -22,7 +22,7 @@
         "family": "Canidae"
     },
     {
-        "Order": "Mammalia",
+        "Order": "CARNIVORA",
         "id": "jackal",
         "name": "Golden Jackal",
         "shortName": "Jackal",
@@ -44,7 +44,7 @@
         "family": "Canidae"
     },
     {
-        "Order": "Mammalia",
+        "Order": "CARNIVORA",
         "id": "himalayan-wolf",
         "name": "Himalayan Wolf",
         "shortName": "Himalayan",
@@ -66,7 +66,7 @@
         "family": "Canidae"
     },
     {
-        "Order": "Mammalia",
+        "Order": "CARNIVORA",
         "id": "indian-fox",
         "name": "Indian Fox",
         "shortName": "Ind. Fox",
@@ -88,7 +88,7 @@
         "family": "Canidae"
     },
     {
-        "Order": "Mammalia",
+        "Order": "CARNIVORA",
         "id": "red-fox",
         "name": "Red Fox",
         "shortName": "Red Fox",
@@ -110,7 +110,7 @@
         "family": "Canidae"
     },
     {
-        "Order": "Mammalia",
+        "Order": "CARNIVORA",
         "id": "indian-wolf",
         "name": "Indian Wolf",
         "shortName": "Ind. Wolf",
@@ -132,7 +132,7 @@
         "family": "Canidae"
     },
     {
-        "Order": "Mammalia",
+        "Order": "CARNIVORA",
         "id": "Indian-Dog",
         "name": "Indian Pariah Dog",
         "shortName": "Indie",
@@ -154,7 +154,7 @@
         "family": "Canidae"
     },
     {
-        "Order": "Mammalia",
+        "Order": "CARNIVORA",
         "id": "Tibetan Sand Fox",
         "name": "Tibetan Sand Fox",
         "shortName": "Sand Fox",
@@ -175,5 +175,51 @@
         ],
         "State&UT": "Ladakh, Sikkim",
         "family": "Canidae"
+    },
+    {
+        "Order": "Proboscidea",
+        "id": "Asiatic-Elephant",
+        "name": "Asiatic Elephant",
+        "shortName": "Ind. Elephant",
+        "scientific": "Elephas maximus indicus",
+        "image": "Indian Elephant.webp",
+        "objectPosition": "top",
+        "status": "Endangered",
+        "population": "22,446",
+        "dietType": "Herbivore",
+        "overview": "The Indian elephant is a massive, intelligent herbivore native to mainland Asia. They are highly social animals with complex emotions and are known as the engineers of the forest ecosystem.",
+        "habitat": "Grasslands, dry deciduous, moist deciduous, evergreen and semi-evergreen forests",
+        "social": "Matriarchal herds",
+        "traits": [
+            80,
+            90,
+            30,
+            65
+        ],
+        "State&UT": "Karnataka,Tamil Nadu,Kerala,Assam, Arunachal Pradesh, Meghalaya, Nagaland, Tripura, Manipur,Odisha, West Bengal, Jharkhand, Chhattisgarh, Andhra Pradesh, Madhya Pradesh, Maharashtra",
+        "family": "Elephantidae"
+    },
+    {
+        "Order": "Carnivora",
+        "id": "Caracal",
+        "name": "Indian Caracal",
+        "shortName": "Ind. Caracal",
+        "scientific": "Caracal caracal schmitzi",
+        "image": "caracal.avif",
+        "objectPosition": "50% 50%",
+        "status": "Critically Endangered",
+        "population": "< 50 (Estimated)",
+        "dietType": "Carnivore",
+        "overview": "The Caracal, locally known as 'Siyah Gosh' (Black Ear), is an elusive and medium-sized wild cat. In India, it is the rarest felid, found primarily in arid scrublands and ravines. It is famous for its incredible agility and ability to leap high into the air to catch birds.",
+        "habitat": "Arid scrublands, dry deciduous forests, ravines, and semi-deserts",
+        "social": "Solitary",
+        "traits": [
+            85,
+            60,
+            98,
+            40
+        ],
+        "State&UT": "Rajasthan, Gujarat, Madhya Pradesh",
+        "family": "Felidae"
     }
 ]

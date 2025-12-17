@@ -138,7 +138,8 @@ function selectFamily(family) {
 
         // Determine status class
         let statusClass = "status-safe";
-        if (s.status === "Endangered") statusClass = "status-endangered";
+        if (s.status === "Critically Endangered") statusClass = "status-critically-endangered";
+        else if (s.status === "Endangered") statusClass = "status-endangered";
         else if (s.status === "Vulnerable") statusClass = "status-vulnerable";
         else if (s.status === "Near Threatened") statusClass = "status-vulnerable";
         else if (s.status === "Abundant") statusClass = "status-abundant";
@@ -191,11 +192,22 @@ function selectSpecies(family, speciesName) {
     // Reset classes
     statusBadge.className = "status-badge";
 
-    if (data.status === "Endangered") statusBadge.classList.add("status-endangered");
+    if (data.status === "Critically Endangered") statusBadge.classList.add("status-critically-endangered");
+    else if (data.status === "Endangered") statusBadge.classList.add("status-endangered");
     else if (data.status === "Vulnerable") statusBadge.classList.add("status-vulnerable");
     else if (data.status === "Near Threatened") statusBadge.classList.add("status-vulnerable");
     else if (data.status === "Abundant") statusBadge.classList.add("status-abundant");
     else statusBadge.classList.add("status-safe");
+
+    // Apply status color to the detail name
+    const detailName = document.getElementById("detail-name");
+    detailName.className = ""; // Reset classes
+    if (data.status === "Critically Endangered") detailName.style.color = "#7f1d1d";
+    else if (data.status === "Endangered") detailName.style.color = "#dc2626";
+    else if (data.status === "Vulnerable") detailName.style.color = "#f59e0b";
+    else if (data.status === "Near Threatened") detailName.style.color = "#f59e0b";
+    else if (data.status === "Abundant") detailName.style.color = "#3b82f6";
+    else detailName.style.color = "#059669";
 
     updateChart(data);
 }
