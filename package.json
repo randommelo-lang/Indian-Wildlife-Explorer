@@ -19,13 +19,17 @@
     },
     "dependencies": {
         "cheerio-without-node-native": "^0.20.2",
-        "dotenv": "^17.2.3",
+        "dotenv": "^16.6.1",
         "express": "^5.2.0",
         "firebase": "^12.6.0"
     },
     "build": {
         "appId": "com.indianwildlife.explorer",
         "productName": "Indian Wildlife Explorer",
+        "files": [
+            "**/*",
+            ".env"
+        ],
         "win": {
             "target": [
                 "nsis",

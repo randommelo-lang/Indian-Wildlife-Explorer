@@ -1,4 +1,75 @@
+// --- THEME MANAGEMENT ---
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+
+    document.documentElement.setAttribute('data-theme', theme);
+    updateThemeIcon(theme);
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcon(newTheme);
+}
+
+function updateThemeIcon(theme) {
+    const themeIcon = document.querySelector('.theme-icon');
+    if (themeIcon) {
+        themeIcon.innerText = theme === 'dark' ? '☀️' : '🌙';
+    }
+}
+
+// Initialize theme immediately
+initTheme();
+document.addEventListener('DOMContentLoaded', () => {
+    const themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+});
+
 let speciesData = {};
+
+// 🛡️ SECURITY: Sanitize HTML to prevent XSS attacks
+function sanitizeHTML(str) {
+    if (typeof str !== 'string') return str;
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+// 🛡️ SECURITY: Validate URL format
+function isValidUrl(url) {
+    if (!url || typeof url !== 'string') return false;
+    // Allow relative paths for local assets
+    if (url.startsWith('Image/') || url.startsWith('./') || url.startsWith('videos/') || url.startsWith('PDF/')) {
+        return true;
+    }
+    try {
+        const parsed = new URL(url);
+        return ['http:', 'https:'].includes(parsed.protocol);
+    } catch {
+        return false;
+    }
+}
+
+// 🛡️ SECURITY: Sanitize URL for use in attributes
+function sanitizeUrl(url) {
+    if (!url || typeof url !== 'string') return '#';
+    // Block javascript: protocol
+    if (url.toLowerCase().startsWith('javascript:')) return '#';
+    // Allow relative paths for local assets
+    if (url.startsWith('Image/') || url.startsWith('./') || url.startsWith('videos/') || url.startsWith('PDF/')) {
+        return url;
+    }
+    // Validate external URLs - don't re-encode URLs that are already valid
+    if (!isValidUrl(url)) return '#';
+    // Return as-is for valid http/https URLs (Firebase URLs are already properly encoded)
+    return url;
+}
 
 async function loadSpeciesData() {
     try {
@@ -103,20 +174,42 @@ function startSpeciesSystem() {
     selector.innerHTML = families.map(f => {
         const firstSpecies = speciesData[f][0];
         const imagePath = firstSpecies.image.startsWith("http") ? firstSpecies.image : `Image/${firstSpecies.image}`;
+        // 🛡️ SECURITY: Sanitize family name to prevent XSS
+        const safeFamily = sanitizeHTML(f);
+        const safeImagePath = sanitizeUrl(imagePath);
 
-        return `<button class="species-item" onclick="selectFamily('${f}')">
+        return `<button class="species-item" data-family="${safeFamily}">
             <div class="thumb-circle">
-                <img src="${imagePath}" alt="${f}">
+                <img src="${safeImagePath}" alt="${safeFamily}">
             </div>
-            <span class="species-name">${f}</span>
+            <span class="species-name">${safeFamily}</span>
         </button>`;
     }).join("");
+
+    // 🛡️ SECURITY: Use event delegation instead of inline onclick
+    selector.addEventListener('click', (e) => {
+        const btn = e.target.closest('.species-item');
+        if (btn && btn.dataset.family) {
+            selectFamily(btn.dataset.family);
+        }
+    });
 }
 
 function selectFamily(family) {
-    // Hide Home Page, Show Species Content
-    document.getElementById("home-content").classList.add("hidden");
-    document.getElementById("species-content").classList.remove("hidden");
+    const homeContent = document.getElementById("home-content");
+    const speciesContent = document.getElementById("species-content");
+
+    // Animate out the home page
+    homeContent.classList.add("fade-out");
+
+    setTimeout(() => {
+        // Hide home, show species with animation
+        homeContent.classList.add("hidden");
+        homeContent.classList.remove("fade-out", "page-view");
+
+        speciesContent.classList.remove("hidden");
+        speciesContent.classList.add("page-view");
+    }, 300);
 
     // Update Details Selector Bar
     const selector = document.getElementById("details-species-selector");
@@ -126,7 +219,7 @@ function selectFamily(family) {
     if (label) label.innerText = family;
 
     selector.innerHTML = `
-        <button class="species-item" onclick="goBack()">
+        <button class="species-item" data-action="back">
             <div class="thumb-circle" style="display:flex; align-items:center; justify-content:center; background:#e7e5e4;">
                 <span style="font-size:1.5rem;">←</span>
             </div>
@@ -134,7 +227,11 @@ function selectFamily(family) {
         </button>
         ${speciesData[family].map(s => {
         const imagePath = s.image.startsWith("http") ? s.image : `Image/${s.image}`;
-        const displayName = s.shortName || s.name; // Use shortName if available
+        const displayName = s.shortName || s.name;
+        // 🛡️ SECURITY: Sanitize all user-displayable content
+        const safeName = sanitizeHTML(s.name);
+        const safeDisplayName = sanitizeHTML(displayName);
+        const safeImagePath = sanitizeUrl(imagePath);
 
         // Determine status class
         let statusClass = "status-safe";
@@ -144,14 +241,26 @@ function selectFamily(family) {
         else if (s.status === "Near Threatened") statusClass = "status-vulnerable";
         else if (s.status === "Abundant") statusClass = "status-abundant";
 
-        return `<button class="species-item" onclick="selectSpecies('${family}', '${s.name}')">
+        return `<button class="species-item" data-family="${sanitizeHTML(family)}" data-species="${safeName}">
                 <div class="thumb-circle ${statusClass}">
-                    <img src="${imagePath}" alt="${s.name}">
+                    <img src="${safeImagePath}" alt="${safeName}">
                 </div>
-                <span class="species-name">${displayName}</span>
+                <span class="species-name">${safeDisplayName}</span>
             </button>`;
     }).join("")}
     `;
+
+    // 🛡️ SECURITY: Use event delegation instead of inline onclick
+    selector.addEventListener('click', (e) => {
+        const btn = e.target.closest('.species-item');
+        if (btn) {
+            if (btn.dataset.action === 'back') {
+                goBack();
+            } else if (btn.dataset.family && btn.dataset.species) {
+                selectSpecies(btn.dataset.family, btn.dataset.species);
+            }
+        }
+    });
 
     // Select first species by default
     selectSpecies(family, speciesData[family][0].name);
@@ -213,8 +322,20 @@ function selectSpecies(family, speciesName) {
 }
 
 function goBack() {
-    document.getElementById("species-content").classList.add("hidden");
-    document.getElementById("home-content").classList.remove("hidden");
+    const homeContent = document.getElementById("home-content");
+    const speciesContent = document.getElementById("species-content");
+
+    // Animate out the species page
+    speciesContent.classList.add("fade-out");
+
+    setTimeout(() => {
+        // Hide species, show home with animation
+        speciesContent.classList.add("hidden");
+        speciesContent.classList.remove("fade-out", "page-view");
+
+        homeContent.classList.remove("hidden");
+        homeContent.classList.add("page-view");
+    }, 300);
 }
 
 function updateChart(species) {
@@ -676,23 +797,36 @@ async function loadNewsContent() {
     feed.innerHTML = list.map((x, index) => {
         const initialImage = x.thumbnail || defaultImage;
         const needsFetch = !x.thumbnail && x.link;
+        // 🛡️ SECURITY: Sanitize all user content
+        const safeTitle = sanitizeHTML(x.title || '');
+        const safeDesc = sanitizeHTML(x.desc || '');
+        const safeLink = sanitizeUrl(x.link || '');
+        const safeImage = sanitizeUrl(initialImage);
 
         return `
-            <div class="news-card" onclick="openNewsPage('${x.link}')" style="cursor: pointer;">
-                <img src="${initialImage}" 
-                     alt="${x.title}" 
+            <div class="news-card" data-link="${safeLink}" style="cursor: pointer;">
+                <img src="${safeImage}" 
+                     alt="${safeTitle}" 
                      class="news-thumbnail" 
                      id="news-thumb-${index}"
-                     data-link="${needsFetch ? x.link : ''}"
+                     data-link="${needsFetch ? safeLink : ''}"
                      data-fallback="${defaultImage}"
                      onerror="this.src='${defaultImage}'">
                 <div class="news-content">
-                    <h3>${x.title}</h3>
-                    <p>${x.desc}</p>
+                    <h3>${safeTitle}</h3>
+                    <p>${safeDesc}</p>
                     <span style="color: var(--primary); font-weight: 600; font-size: 0.9rem;">Read more ↗</span>
                 </div>
             </div>`;
     }).join("");
+
+    // 🛡️ SECURITY: Use event delegation for news card clicks
+    feed.addEventListener('click', (e) => {
+        const card = e.target.closest('.news-card');
+        if (card && card.dataset.link) {
+            openNewsPage(card.dataset.link);
+        }
+    });
 
     list.forEach((x, index) => {
         if (!x.thumbnail && x.link) {
@@ -739,21 +873,38 @@ async function loadVideosContent() {
             const tempId = getYouTubeEmbedID(v.link);
             if (tempId) thumbnail = `https://img.youtube.com/vi/${tempId}/hqdefault.jpg`;
         } else if (v.localPath) {
-            // For local videos, we could use a specific icon or just the default nature image
-            thumbnail = 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80'; // Scenic mountain for local video
+            thumbnail = 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80';
         }
 
+        // 🛡️ SECURITY: Sanitize all user content
+        const safeTitle = sanitizeHTML(v.title || '');
+        const safeDesc = sanitizeHTML(v.desc || '');
+        const safeVideoSource = sanitizeHTML(videoSource || '');
+        const safeThumbnail = sanitizeUrl(thumbnail);
+
         wrapper.innerHTML = `
-            <div class="video-thumbnail-wrapper" onclick="openVideoModal('${videoSource || ''}')">
-                <img src="${thumbnail}" alt="${v.title}" class="video-thumbnail" onerror="this.src='https://images.unsplash.com/photo-1500485035595-cbe6f645feb1?w=800&q=80'">
+            <div class="video-thumbnail-wrapper" data-source="${safeVideoSource}">
+                <img src="${safeThumbnail}" alt="${safeTitle}" class="video-thumbnail" onerror="this.src='https://images.unsplash.com/photo-1500485035595-cbe6f645feb1?w=800&q=80'">
                 <div class="play-overlay">▶</div>
             </div>
             <div class="video-info">
-                <h3>${v.title}</h3>
-                <p>${v.desc}</p>
-                <a href="javascript:void(0)" onclick="openVideoModal('${videoSource || ''}')">Watch Now ↗</a>
+                <h3>${safeTitle}</h3>
+                <p>${safeDesc}</p>
+                <a href="javascript:void(0)" class="watch-video-link" data-source="${safeVideoSource}">Watch Now ↗</a>
             </div>`;
         feed.appendChild(wrapper);
+    });
+
+    // 🛡️ SECURITY: Use event delegation for video interactions
+    feed.addEventListener('click', (e) => {
+        const thumbWrapper = e.target.closest('.video-thumbnail-wrapper');
+        const watchLink = e.target.closest('.watch-video-link');
+        if (thumbWrapper && thumbWrapper.dataset.source) {
+            openVideoModal(thumbWrapper.dataset.source);
+        } else if (watchLink && watchLink.dataset.source) {
+            e.preventDefault();
+            openVideoModal(watchLink.dataset.source);
+        }
     });
 }
 
@@ -952,35 +1103,58 @@ async function loadArticlesContent() {
 
     const defaultImage = "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=600&auto=format&fit=crop";
 
-    feed.innerHTML = list.map((x) => {
+    feed.innerHTML = list.map((x, index) => {
         const coverImage = x.coverPhoto || defaultImage;
-
-        // Always open article popup, no matter if link or pdf
-        const viewerData = JSON.stringify({
-            title: x.title,
-            path: x.localPath || x.link || ""
-        }).replace(/"/g, "&quot;");
+        // 🛡️ SECURITY: Sanitize all user content
+        const safeTitle = sanitizeHTML(x.title || '');
+        const safeChecklist = sanitizeHTML(x.checklist || '');
+        const safeCoverImage = sanitizeUrl(coverImage);
+        const safePath = x.localPath || x.link || '';
+        const safeId = sanitizeHTML(x.id || '');
 
         return `
-            <div class="book-card-container">
-                <div class="book-card" onclick='openArticleViewerData(${viewerData})'>
+            <div class="book-card-container" data-article-index="${index}" data-article-path="${safePath}" data-article-title="${safeTitle}">
+                <div class="book-card">
                     <div class="book-cover">
-                        <img src="${coverImage}" alt="${x.title}">
+                        <img src="${safeCoverImage}" alt="${safeTitle}">
                         <div class="book-spine"></div>
                     </div>
                 </div>
                 <div class="book-details">
                     <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom: 0.5rem;">
-                        <h3 class="book-title">${x.title}</h3>
-                        ${x.checklist ? `<span class="status-badge status-safe" style="font-size:0.65rem; padding: 2px 6px; height: fit-content;">${x.checklist}</span>` : ''}
+                        <h3 class="book-title">${safeTitle}</h3>
+                        ${x.checklist ? `<span class="status-badge status-safe" style="font-size:0.65rem; padding: 2px 6px; height: fit-content;">${safeChecklist}</span>` : ''}
                     </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span class="book-action" onclick='openArticleViewerData(${viewerData})'>Open Article ↗</span>
-                        <button class="delete-article-btn" onclick="event.stopPropagation(); deleteArticle('${x.id}', '${x.title.replace(/'/g, "\\'")}')">🗑️</button>
-                    </div>
+                    <span class="book-action open-article-btn">Open Article ↗</span>
                 </div>
             </div>`;
     }).join("");
+
+    // 🛡️ SECURITY: Use event delegation for article interactions
+    feed.addEventListener('click', (e) => {
+        const container = e.target.closest('.book-card-container');
+        const deleteBtn = e.target.closest('.delete-article-btn');
+        const openBtn = e.target.closest('.open-article-btn');
+        const bookCard = e.target.closest('.book-card');
+
+        if (deleteBtn) {
+            e.stopPropagation();
+            const id = deleteBtn.dataset.articleId;
+            const title = deleteBtn.dataset.articleTitle;
+            deleteArticle(id, title);
+        } else if ((openBtn || bookCard) && container) {
+            const path = container.dataset.articlePath;
+            const title = container.dataset.articleTitle;
+            openArticleViewer(path, title);
+        }
+    });
+}
+
+// Helper function to open article viewer from data
+function openArticleViewerData(data) {
+    if (data && data.path) {
+        openArticleViewer(data.path, data.title);
+    }
 }
 
 // Delete article from Firestore
@@ -1098,6 +1272,65 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    // Video File Selection Display
+    const videoFileInput = document.getElementById('upload-video-file');
+    const videoFileName = document.getElementById('video-file-name');
+    if (videoFileInput && videoFileName) {
+        videoFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                videoFileName.textContent = file.name;
+                videoFileName.classList.remove('hidden');
+            } else {
+                videoFileName.classList.add('hidden');
+            }
+        });
+    }
+
+    // Article File Selection Display
+    const articleFileInput = document.getElementById('upload-article-file');
+    const articleFileName = document.getElementById('article-file-name');
+    if (articleFileInput && articleFileName) {
+        articleFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                articleFileName.textContent = file.name;
+                articleFileName.classList.remove('hidden');
+            } else {
+                articleFileName.classList.add('hidden');
+            }
+        });
+    }
+
+    // 🛡️ SECURITY: Event listeners for modal close buttons (instead of inline onclick)
+    const closeVideoModalBtn = document.getElementById('close-video-modal-btn');
+    if (closeVideoModalBtn) {
+        closeVideoModalBtn.addEventListener('click', closeVideoModal);
+    }
+
+    const closeNewsPageBtn = document.getElementById('close-news-page-btn');
+    if (closeNewsPageBtn) {
+        closeNewsPageBtn.addEventListener('click', closeNewsPage);
+    }
+
+    const closeArticleViewerBtn = document.getElementById('close-article-viewer-btn');
+    if (closeArticleViewerBtn) {
+        closeArticleViewerBtn.addEventListener('click', closeArticleViewer);
+    }
+
+    // Close video modal when clicking outside content
+    const videoModal = document.getElementById('video-modal');
+    if (videoModal) {
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) {
+                closeVideoModal();
+            }
+        });
+        // Prevent clicks inside modal content from closing
+        const modalContent = videoModal.querySelector('.video-modal-content');
+        if (modalContent) {
+            modalContent.addEventListener('click', (e) => e.stopPropagation());
+        }
+    }
 });
-
-
